@@ -1,33 +1,29 @@
-name: Build APK
+name: Build Android APK
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:
   build:
-    name: Build APK
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.10.6" # Match your Flutter version
+          flutter-version: '3.10.6'
 
-      - name: Install dependencies
+      - name: Get dependencies
         run: flutter pub get
 
-      - name: Build APK (release)
+      - name: Build release APK
         run: flutter build apk --release
 
-      - name: Upload APK
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: etalons-apk
+          name: app-release
           path: build/app/outputs/flutter-apk/app-release.apk
