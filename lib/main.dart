@@ -1,52 +1,48 @@
 import 'dart:io';
 
 import 'package:etalons/ui/home_ui.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logging/logging.dart';
-// import 'crashlytics/crashlytics.dart';
+
+// Uncomment these if you want Firebase Crashlytics later
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 // import 'firebase_options.dart';
+
 import 'theme/config/theme.dart';
 import 'theme/theme_mode_state.dart';
 
 Future<void> main() async {
-  // FirebaseCrashlytics? crashlytics;
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // --- Optional Firebase Initialization ---
+  // Only needed if you want crash reporting
   // if (!kIsWeb && (Platform.isIOS || Platform.isAndroid)) {
   //   try {
-  //     WidgetsFlutterBinding.ensureInitialized();
   //     await Firebase.initializeApp(
   //       options: DefaultFirebaseOptions.currentPlatform,
   //     );
-  //     crashlytics = FirebaseCrashlytics.instance;
+  //     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   //   } catch (e) {
   //     debugPrint("Firebase couldn't be initialized: $e");
   //   }
   // }
 
-  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  await Hive.openBox('prefs');
 
-  await guardWithCrashlytics(
-    guardedMain,
-    crashlytics: null, // skip crashlytics
-  );
-}
-
-void guardedMain() async {
   if (kReleaseMode) {
     Logger.root.level = Level.WARNING;
   }
+
   Logger.root.onRecord.listen((record) {
     debugPrint('${record.level.name}: ${record.time}: '
         '${record.loggerName}: '
         '${record.message}');
   });
-
-  await Hive.initFlutter();
-  await Hive.openBox('prefs');
 
   runApp(
     const ProviderScope(
