@@ -6,43 +6,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logging/logging.dart';
-
-// Uncomment these if you want Firebase Crashlytics later
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-// import 'firebase_options.dart';
-
 import 'theme/config/theme.dart';
 import 'theme/theme_mode_state.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await guardedMain();
+}
 
-  // --- Optional Firebase Initialization ---
-  // Only needed if you want crash reporting
-  // if (!kIsWeb && (Platform.isIOS || Platform.isAndroid)) {
-  //   try {
-  //     await Firebase.initializeApp(
-  //       options: DefaultFirebaseOptions.currentPlatform,
-  //     );
-  //     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-  //   } catch (e) {
-  //     debugPrint("Firebase couldn't be initialized: $e");
-  //   }
-  // }
-
-  await Hive.initFlutter();
-  await Hive.openBox('prefs');
-
+Future<void> guardedMain() async {
   if (kReleaseMode) {
     Logger.root.level = Level.WARNING;
   }
-
   Logger.root.onRecord.listen((record) {
     debugPrint('${record.level.name}: ${record.time}: '
         '${record.loggerName}: '
         '${record.message}');
   });
+
+  await Hive.initFlutter();
+  await Hive.openBox('prefs');
 
   runApp(
     const ProviderScope(
