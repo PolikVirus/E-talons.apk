@@ -1,14 +1,13 @@
 buildscript {
-    ext.kotlin_version = '1.8.22' // updated Kotlin version
+    ext.kotlin_version = '1.7.10'
     repositories {
         google()
         mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2' // updated AGP version
+        classpath 'com.android.tools.build:gradle:7.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        // Removed Firebase and Crashlytics plugins
     }
 }
 
