@@ -20,7 +20,7 @@ dependencies:
   flutter_svg: ^2.0.4
   logging: ^1.1.1
   firebase_core: ^1.24.0
-  firebase_crashlytics: ^2.14.0
+  firebase_crashlytics: ^2.9.0   # <- downgraded for compatibility
   intl: ^0.18.0
   flutter_speed_dial: ^6.2.0
 
