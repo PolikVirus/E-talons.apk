@@ -1,4 +1,4 @@
-name: Flutter Build APK
+name: Build Android APK
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Build APK
+    name: Build Flutter APK
     runs-on: ubuntu-latest
 
     steps:
@@ -18,21 +18,16 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.10.6
-          channel: stable
-          cache: true
+          flutter-version: '3.10.6'
 
-      - name: Flutter Pub Get
+      - name: Get dependencies
         run: flutter pub get
 
-      - name: Clean previous builds
-        run: flutter clean
+      - name: Build release APK
+        run: flutter build apk --release --no-tree-shake-icons
 
-      - name: Build APK (Release)
-        run: flutter build apk --release
-
-      - name: Upload APK
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: etalons-release-apk
+          name: app-release
           path: build/app/outputs/flutter-apk/app-release.apk
