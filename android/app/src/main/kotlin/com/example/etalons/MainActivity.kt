@@ -15,7 +15,6 @@ import androidx.appcompat.app.AlertDialog
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugins.firebase.crashlytics.FlutterFirebaseCrashlyticsPlugin.TAG
 import java.io.IOException
 
 class MainActivity: FlutterActivity() {
