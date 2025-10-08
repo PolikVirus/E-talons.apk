@@ -1,11 +1,10 @@
 name: etalons
 description: A new Flutter project.
 publish_to: 'none'
-
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=2.19.2 <3.1.0'
 
 dependencies:
   flutter:
@@ -14,13 +13,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_riverpod: ^2.3.2
   hive_flutter: ^1.1.0
-  hive: ^2.2.3
-  json_annotation: ^4.8.1
   expandable: ^5.0.1
   flutter_svg: ^2.0.4
   logging: ^1.1.1
-  firebase_core: ^1.24.0
-  firebase_crashlytics: ^2.9.0   # <- downgraded for compatibility
+  json_annotation: ^4.8.0
+  hive: ^2.2.3
   intl: ^0.18.0
   flutter_speed_dial: ^6.2.0
 
@@ -28,10 +25,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
-  build_runner: ^2.4.7
-  hive_generator: ^2.0.1
-  json_serializable: ^6.6.1
-  watcher: ^1.1.1
+  build_runner: ^2.3.3
+  json_serializable: ^6.7.0
 
 flutter:
   uses-material-design: true
