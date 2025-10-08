@@ -1,6 +1,7 @@
 name: etalons
 description: A new Flutter project.
 publish_to: 'none'
+
 version: 1.0.0+1
 
 environment:
@@ -9,10 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   cupertino_icons: ^1.0.2
   flutter_riverpod: ^2.3.2
   hive_flutter: ^1.1.0
+  hive: ^2.2.3
   expandable: ^5.0.1
   flutter_svg: ^2.0.4
   logging: ^1.1.1
@@ -20,8 +21,6 @@ dependencies:
   firebase_crashlytics: ^2.8.6
   firebase_core_platform_interface: 4.5.1
   json_annotation: ^4.8.0
-  hive_generator: ^2.0.1
-  hive: ^2.2.3
   intl: ^0.18.0
   flutter_speed_dial: ^6.2.0
 
@@ -30,5 +29,13 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^2.0.0
   build_runner: ^2.4.7
-  json_serializable: ^6.6.1
-  watcher: ^1.0.3 # updated to fix Dart 3 sealed class issue
+  hive_generator: ^2.0.0
+  json_serializable: ^6.7.0
+
+dependency_overrides:
+  build_resolvers: ^2.1.2   # <-- FIX for Flutter 3.24 build_runner issue
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
