@@ -1,29 +1,42 @@
-name: Android Build
+name: Build Android APK
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - main  # Or your default branch
+  workflow_dispatch: # Allows manual trigger
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      # Step 1: Checkout the repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Set up Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '3.24.3'
-        channel: stable
+      # Step 2: Setup Flutter
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.24.3
+          channel: stable
 
-    - name: Install dependencies
-      run: flutter pub get
+      # Step 3: Get Flutter dependencies
+      - name: Flutter pub get
+        run: flutter pub get
 
-    - name: Generate Hive & JSON files
-      run: flutter pub run build_runner build --delete-conflicting-outputs
+      # Step 4: Build generated code (Hive adapters / JSON)
+      - name: Generate Hive & JSON code
+        run: flutter pub run build_runner build --delete-conflicting-outputs
 
-    - name: Build APK
-      run: flutter build apk --debug --no-shrink
+      # Step 5: Build APK
+      - name: Build APK
+        run: flutter build apk --release
+
+      # Step 6: Upload APK as artifact
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: etalons-release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
