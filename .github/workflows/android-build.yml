@@ -4,41 +4,46 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.6' # stable version that works
+          flutter-version: '3.24.3' # valid stable Flutter version
+          channel: stable
 
       - name: Enable Flutter caching
         uses: actions/cache@v3
         with:
           path: |
             ~/.pub-cache
-          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
+            .dart_tool
+            build
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pub-
+            ${{ runner.os }}-flutter-
 
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Generate Hive adapters and JSON code
+      - name: Generate Hive & JSON files
         run: flutter pub run build_runner build --delete-conflicting-outputs
 
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk --debug --no-shrink
 
-      - name: Upload APK
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: etalons-release-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          name: etalons-debug-apk
+          path: build/app/outputs/flutter-apk/app-debug.apk
