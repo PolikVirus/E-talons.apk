@@ -31,7 +31,8 @@ class _HistoryUIState extends State<HistoryUI> {
                     padding: const EdgeInsets.only(bottom: 12.0),
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: Theme.of(context).primaryColor,
+                          backgroundColor: Theme.of(context)
+                              .primaryColor, // updated
                           minimumSize: const Size(double.infinity, 50),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -93,7 +94,7 @@ class _HistoryUIState extends State<HistoryUI> {
                                         Text('Tickets',
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .headline6),
+                                                .titleLarge), // updated
                                         const Spacer(),
                                         const Text('Purchase date',
                                             style: TextStyle(
@@ -159,7 +160,7 @@ class _HistoryUIState extends State<HistoryUI> {
                                             "Rides",
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .bodyText1,
+                                                .bodyLarge, // updated
                                           )),
                                       collapsed: etalon.secondBusNumber
                                               .toString()
