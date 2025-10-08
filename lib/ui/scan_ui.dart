@@ -44,16 +44,13 @@ class ScanViewState extends State<ScanView> {
 
     final etalon = Etalons.fromJson(_nfcData);
 
-    // Check if card already exists in history
     final existingCards =
         _historyBox.values.where((card) => card.id == etalon.id);
 
     if (existingCards.isNotEmpty) {
-      // Delete old card from history
       await _historyBox.delete(existingCards.first.key);
     }
 
-    // Add new card to history
     await _historyBox.add(etalon);
 
     setState(() {});
@@ -68,7 +65,7 @@ class ScanViewState extends State<ScanView> {
 
   Future<void> _initHive() async {
     await Hive.initFlutter();
-    Hive.resetAdapters(); // an error occurs without resetting the adapters
+    Hive.resetAdapters();
     Hive.registerAdapter(EtalonsAdapter());
     _historyBox = await Hive.openBox<Etalons>('history');
   }
@@ -97,6 +94,7 @@ class ScanViewState extends State<ScanView> {
         busTypeToColor[busData.firstBusType] ?? Colors.transparent;
     Color secondBusColor =
         busTypeToColor[busData.secondBusType] ?? Colors.transparent;
+
     return Scaffold(
       floatingActionButton: SpeedDial(
         childMargin: const EdgeInsets.all(24),
@@ -124,8 +122,6 @@ class ScanViewState extends State<ScanView> {
             labelStyle: const TextStyle(fontSize: 18.0),
             onTap: () => print('about dialog'),
           ),
-
-          //add more menu item childs here
         ],
       ),
       body: Padding(
@@ -167,9 +163,7 @@ class ScanViewState extends State<ScanView> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const SizedBox(
-                                    height: 60,
-                                  ),
+                                  const SizedBox(height: 60),
                                   SvgPicture.asset(
                                     colorFilter: const ColorFilter.mode(
                                         Colors.grey, BlendMode.srcIn),
@@ -177,13 +171,13 @@ class ScanViewState extends State<ScanView> {
                                     height: 130,
                                   ),
                                   const SizedBox(height: 60),
-                                  Text('Tap to start scanning for E-talons',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline6),
-                                  const SizedBox(
-                                    height: 70,
+                                  Text(
+                                    'Tap to start scanning for E-talons',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge, // updated
                                   ),
+                                  const SizedBox(height: 70),
                                 ],
                               ),
                             )
@@ -203,23 +197,24 @@ class ScanViewState extends State<ScanView> {
                                       left: 12.0, bottom: 12, right: 12),
                                   child: Row(
                                     children: [
-                                      Text('Tickets',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline6),
+                                      Text(
+                                        'Tickets',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge, // updated
+                                      ),
                                       const Spacer(),
-                                      const Text('Purchase date',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                          )),
+                                      const Text(
+                                        'Purchase date',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
-                                const Divider(
-                                  height: 1,
-                                  thickness: 1,
-                                ),
+                                const Divider(height: 1, thickness: 1),
                                 Padding(
                                   padding: const EdgeInsets.only(
                                       left: 12.0, right: 12),
@@ -227,16 +222,12 @@ class ScanViewState extends State<ScanView> {
                                     height: 50,
                                     child: Row(
                                       children: [
-                                        Text(
-                                            busData.getRemainingTrips
-                                                .toString(),
-                                            style:
-                                                const TextStyle(fontSize: 24)),
+                                        Text(busData.getRemainingTrips.toString(),
+                                            style: const TextStyle(fontSize: 24)),
                                         const Text('  /  ',
                                             style: TextStyle(fontSize: 24)),
                                         Text(busData.getTotalTrips.toString(),
-                                            style:
-                                                const TextStyle(fontSize: 24)),
+                                            style: const TextStyle(fontSize: 24)),
                                         const Spacer(),
                                         const Text('2021-05-05'),
                                       ],
@@ -273,11 +264,10 @@ class ScanViewState extends State<ScanView> {
                                               "Rides",
                                               style: Theme.of(context)
                                                   .textTheme
-                                                  .bodyText1,
-                                            )),
-                                    collapsed: busData.secondBusNumber
-                                            .toString()
-                                            .isEmpty
+                                                  .bodyLarge, // updated
+                                            ),
+                                          ),
+                                    collapsed: busData.secondBusNumber.toString().isEmpty
                                         ? RideListTile(
                                             titleText: busData.firstRideTime,
                                             busColor: firstBusColor,
@@ -288,27 +278,21 @@ class ScanViewState extends State<ScanView> {
                                             busColor: secondBusColor,
                                             busNumber: busData.secondBusNumber,
                                           ),
-                                    expanded: busData.secondBusNumber
-                                            .toString()
-                                            .isEmpty
+                                    expanded: busData.secondBusNumber.toString().isEmpty
                                         ? const SizedBox.shrink()
                                         : Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: <Widget>[
                                               RideListTile(
-                                                titleText:
-                                                    busData.secondRideTime,
+                                                titleText: busData.secondRideTime,
                                                 busColor: secondBusColor,
-                                                busNumber:
-                                                    busData.secondBusNumber,
+                                                busNumber: busData.secondBusNumber,
                                               ),
                                               RideListTile(
-                                                titleText:
-                                                    busData.firstRideTime,
+                                                titleText: busData.firstRideTime,
                                                 busColor: firstBusColor,
-                                                busNumber:
-                                                    busData.firstBusNumber,
+                                                busNumber: busData.firstBusNumber,
                                               )
                                             ],
                                           ),
@@ -327,14 +311,12 @@ class ScanViewState extends State<ScanView> {
                             ),
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Align(
                 alignment: Alignment.centerRight,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).primaryColor,
+                    backgroundColor: Theme.of(context).primaryColor, // updated
                     minimumSize: const Size(double.infinity, 70),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
