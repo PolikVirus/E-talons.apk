@@ -3,37 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logging/logging.dart';
-
-import 'package:etalons/ui/home_ui.dart';
+import 'ui/home_ui.dart';
 import 'theme/config/theme.dart';
 import 'theme/theme_mode_state.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await guardedMain(); // Run app without Firebase
-}
-
-Future<void> guardedMain() async {
-  // Set up logging
-  if (kReleaseMode) {
-    Logger.root.level = Level.WARNING;
-  }
-  Logger.root.onRecord.listen((record) {
-    debugPrint('${record.level.name}: ${record.time}: '
-        '${record.loggerName}: '
-        '${record.message}');
-  });
 
   // Initialize Hive
   await Hive.initFlutter();
   await Hive.openBox('prefs');
 
-  // Run app
-  runApp(
-    const ProviderScope(
-      child: MyApp(),
-    ),
-  );
+  // Logging setup
+  if (kReleaseMode) {
+    Logger.root.level = Level.WARNING;
+  }
+  Logger.root.onRecord.listen((record) {
+    debugPrint('${record.level.name}: ${record.time}: '
+        '${record.loggerName}: ${record.message}');
+  });
+
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends ConsumerWidget {
