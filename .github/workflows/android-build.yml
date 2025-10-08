@@ -1,4 +1,4 @@
-name: Flutter Android Build
+name: Android Build
 
 on:
   push:
@@ -15,24 +15,32 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Setup Flutter with a version that supports Dart >=3.1
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.10.6 # Compatible stable Flutter version
+          flutter-version: 3.13.1
           channel: stable
 
+      # Enable Flutter analytics off
+      - name: Disable Flutter analytics
+        run: flutter config --no-analytics
+
+      # Install dependencies
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Generate Hive & JSON files
+      # Generate Hive TypeAdapters and JSON serialization files
+      - name: Build runner
         run: flutter pub run build_runner build --delete-conflicting-outputs
-        continue-on-error: true  # Skip errors if build_runner fails
 
+      # Build the APK
       - name: Build APK
         run: flutter build apk --release
 
+      # Upload the APK as artifact
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: etalons-apk
           path: build/app/outputs/flutter-apk/app-release.apk
